@@ -1,0 +1,239 @@
+{
+  "metadata": {
+    "schemaVersion": "1.0",
+    "importType": "LEX",
+    "importFormat": "JSON"
+  },
+  "resource": {
+    "name": "RecipeBot",
+    "version": "7",
+    "intents": [
+      {
+        "name": "greeting",
+        "version": "4",
+        "fulfillmentActivity": {
+          "type": "ReturnIntent"
+        },
+        "sampleUtterances": [
+          "Hi",
+          "How are you",
+          "Who are you",
+          "What can you do"
+        ],
+        "slots": [],
+        "conclusionStatement": {
+          "messages": [
+            {
+              "contentType": "PlainText",
+              "content": "I am good"
+            },
+            {
+              "contentType": "PlainText",
+              "content": "Great!"
+            },
+            {
+              "contentType": "PlainText",
+              "content": "I can satisfy your cravings!"
+            },
+            {
+              "contentType": "PlainText",
+              "content": "Could be better after eating... Anything you want?"
+            },
+            {
+              "contentType": "PlainText",
+              "content": "I am the great Recipe Master"
+            }
+          ]
+        }
+      },
+      {
+        "name": "randomSuggestion",
+        "version": "6",
+        "fulfillmentActivity": {
+          "type": "CodeHook",
+          "codeHook": {
+            "uri": "arn:aws:lambda:us-east-1:222679613190:function:recipeProcessor",
+            "messageVersion": "1.0"
+          }
+        },
+        "sampleUtterances": [
+          "Surprise me",
+          "Get me anything",
+          "I want to cook anything",
+          "Suggest me a recipe"
+        ],
+        "slots": []
+      },
+      {
+        "name": "getJoke",
+        "version": "1",
+        "fulfillmentActivity": {
+          "type": "CodeHook",
+          "codeHook": {
+            "uri": "arn:aws:lambda:us-east-1:222679613190:function:recipeProcessor",
+            "messageVersion": "1.0"
+          }
+        },
+        "sampleUtterances": [
+          "Tell me a joke",
+          "Make me laugh",
+          "Humor me",
+          "Tell me something funny",
+          "Food jokes"
+        ],
+        "slots": [],
+        "conclusionStatement": {
+          "messages": [
+            {
+              "contentType": "PlainText",
+              "content": "One joke coming right up."
+            },
+            {
+              "contentType": "PlainText",
+              "content": "I just came up with this"
+            },
+            {
+              "contentType": "PlainText",
+              "content": "This is gold yo!"
+            },
+            {
+              "contentType": "PlainText",
+              "content": "Check me out"
+            }
+          ]
+        }
+      },
+      {
+        "name": "getRecipe",
+        "version": "18",
+        "fulfillmentActivity": {
+          "type": "CodeHook",
+          "codeHook": {
+            "uri": "arn:aws:lambda:us-east-1:222679613190:function:recipeProcessor",
+            "messageVersion": "1.0"
+          }
+        },
+        "sampleUtterances": [
+          "Get me a recipe for {cuisines} dish",
+          "I want to cook {cuisines}",
+          "Suggest me a recipe {cuisines} foods",
+          "I am feeling {cuisines}",
+          "I taste {cuisines}",
+          "I am craving for {cuisines} food",
+          "get me a recipe for {foods}",
+          "I need a recipe",
+          "I want to cook {foods}",
+          "I am craving a {foods}",
+          "I need to {foods} in {cookTime}",
+          "I need to cook {cuisines} food in under {cookTime}",
+          "{cuisines}",
+          "{foods}"
+        ],
+        "slots": [
+          {
+            "name": "cookTime",
+            "slotConstraint": "Required",
+            "slotType": "AMAZON.DURATION",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "How long do you want to cook for?"
+                },
+                {
+                  "contentType": "PlainText",
+                  "content": "How much time do you have?"
+                }
+              ],
+              "maxAttempts": 2,
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\"}"
+            },
+            "priority": 4,
+            "sampleUtterances": []
+          },
+          {
+            "name": "cuisines",
+            "slotConstraint": "Optional",
+            "slotType": "cuisineAll",
+            "slotTypeVersion": "1",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Any cuisines/tastes you like?"
+                }
+              ],
+              "maxAttempts": 2,
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[]}"
+            },
+            "priority": 1,
+            "sampleUtterances": []
+          },
+          {
+            "name": "foods",
+            "slotConstraint": "Required",
+            "slotType": "AMAZON.Food",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "What are you craving?"
+                },
+                {
+                  "contentType": "PlainText",
+                  "content": "Any food in your mind?"
+                },
+                {
+                  "contentType": "PlainText",
+                  "content": "What food do you want to eat?"
+                }
+              ],
+              "maxAttempts": 2,
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\"}"
+            },
+            "priority": 3,
+            "sampleUtterances": []
+          }
+        ]
+      }
+    ],
+    "slotTypes": [
+      {
+        "name": "cuisineAll",
+        "version": "1",
+        "enumerationValues": [
+          {
+            "value": "thai",
+            "synonyms": []
+          },
+          {
+            "value": "indian",
+            "synonyms": []
+          }
+        ],
+        "valueSelectionStrategy": "ORIGINAL_VALUE"
+      }
+    ],
+    "voiceId": "Salli",
+    "childDirected": false,
+    "locale": "en-US",
+    "idleSessionTTLInSeconds": 300,
+    "clarificationPrompt": {
+      "messages": [
+        {
+          "contentType": "PlainText",
+          "content": "Sorry, can you please repeat that?"
+        }
+      ],
+      "maxAttempts": 5
+    },
+    "abortStatement": {
+      "messages": [
+        {
+          "contentType": "PlainText",
+          "content": "Sorry, I could not understand. Goodbye."
+        }
+      ]
+    }
+  }
+}
