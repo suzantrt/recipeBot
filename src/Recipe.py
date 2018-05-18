@@ -4,12 +4,12 @@ import json
 
 
 HEADERS={
-"X-Mashape-Key" : '8yTX11t4Mfmshwa9o1sbifmmmE5jp1lWBZejsnkTReTtyXV4Ow',
+"X-Mashape-Key" : api-key,
 "Accept" : "application/json"
 }
 ENDPOINT = \
 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/'
-API_KEY = '8yTX11t4Mfmshwa9o1sbifmmmE5jp1lWBZejsnkTReTtyXV4Ow'
+API_KEY = 'api-key'
 
 def getJoke():
   url = ENDPOINT + "food/jokes/random"
