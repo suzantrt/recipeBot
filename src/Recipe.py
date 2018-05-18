@@ -1,94 +1,94 @@
-import requests
-
-class Recipe:
-    self.headers ={
-    "X-Mashape-Key" : self.api_key,
-    "Accept" : "application/json"
-    }
-    self.endpoint = \
-      'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/'
-    self.api_key = api_key
-
-    def getJoke(self):
-        url = self.endpoint + "food/jokes/random"
-        return requests.get(url,headers=self.headers).json()
-
-    def findByIngredients(self, ingredients):
-        url = self.endpoint + 'recipes/findByIngredients'
-        params = {
-        'fillIngredients': False, #Add information about the used and missing ingredients in each recipe.
-        'ingredients': ingredients, #string csv ingredient list
-        'limitLicense': False,
-        'number': 5, #how many recipies to return
-        'ranking': 1 #maximize used ingredient
-        }
-
-      headers={
-      "X-Mashape-Key": self.api_key,
-      "Accept": "application/json"
-      }
-
-      return requests.get(url, params=params, headers=headers).json()
-
-    def getRandomRecipe(self,preference):#suprise me son!
-        url = self.endpoint + "recipes/random"
-
-        params = {
-        'limitLicense':false,
-        'number':1,
-        'tags':pref #csv
-        }
-        return requests.get(url,params=params,headers=self.headers).json()['recipes']
+from botocore.vendored import requests
+import json
 
 
-    def simpleSearch(self,query):
-        url = self.endpoint + "recipes/autocomplete"
-        params = {
-        'number' : 5,
-        'query':query
-        }
-        return requests.get(url,params=params,headers=self.headers).json()
 
-    def getWinePairing(self,food,price):
-        url = self.endpoint + "food/wine/pairing"
+HEADERS={
+"X-Mashape-Key" : '8yTX11t4Mfmshwa9o1sbifmmmE5jp1lWBZejsnkTReTtyXV4Ow',
+"Accept" : "application/json"
+}
+ENDPOINT = \
+'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/'
+API_KEY = '8yTX11t4Mfmshwa9o1sbifmmmE5jp1lWBZejsnkTReTtyXV4Ow'
 
-        params = {
-        'food':wine
-        'maxPrice': price #int
-        }
-        #returns a pairing text reply rather than list of wines. SMART!
-        return requests.get(url,params=params,headers=self.headers).json()["pairingText"]
+def getJoke():
+  url = ENDPOINT + "food/jokes/random"
+  return requests.get(url,headers=HEADERS).json()
 
-    def findByCuisine(self, cuisine):
-        url = self.endpoint + "recipes/search"
+def findByIngredients(ingredients):
+  url = ENDPOINT + 'recipes/findByIngredients'
+  params = {
+  'fillIngredients': False, #Add information about the used and missing ingredients in each recipe.
+  'ingredients': ingredients, #string csv ingredient list
+  'limitLicense': False,
+  'number': 5, #how many recipies to return
+  'ranking': 1 #maximize used ingredient
+  }
+  headers={
+  "X-Mashape-Key": API_KEY,
+  "Accept": "application/json"
+  }
+  return requests.get(url, params=params, headers=headers).json()
 
-        params = {
-        'number': 5,
-        'query': ' ',
-        'cuisine': cuisine
-        }
-        return requests.get(url, params=params, headers=self.headers).json()['results']
+def getRandomRecipe(pref=""):#suprise me son!
+  url = ENDPOINT + "recipes/random"
 
-    #TODO
-    def complexRecipeSerach(self,cuisine,diet,exclude,include,maxkcal,query,type):
-        url = self.endpoint + "recipes/searchComplex"
+  params = {
+  'limitLicense':'false',
+  'number':1,
+  'tags':pref #csv
+  }
+  return requests.get(url,params=params,headers=HEADERS).json()['recipes']
 
-        params = {
+def info(id):
+  url = ENDPOINT + "recipes/{}/information".format(id)
+  params = {'includeNutrition': False }
+  return requests.get(url,params=params,headers=HEADERS).json()
 
-        }
-        return requests.get(url,params=params,headers=headers).json()['results']
+def steps(id):
+    url = ENDPOINT + "recipes/{}/analyzedInstructions".format(id)
+    params = {'stepBreakdown': True}
+    return requests.get(url, params=params, headers=HEADERS).json()
+    
+def simpleSearch(query):
+  url = ENDPOINT + "recipes/search"
+  params = {
+  'number': 1,
+  'query': query,
+  }
+  return requests.get(url,params=params,headers=HEADERS).json()['results']
 
-    def getRecipeInfo(self, id):
-        url = self.endpoint + "recipes/" + str(id) + "/information"
-        params = {'includeNutrition': False } # false for now
+def getWinePairing(food,price):
+  url = ENDPOINT + "food/wine/pairing"
 
-        return requests.get(url, params=params, headers=self.headers).json()
+  params = {
+  'food':wine,
+  'maxPrice': price #int
+  }
+  #returns a pairing text reply rather than list of wines. SMART!
+  return requests.get(url,params=params,headers=HEADERS).json()["pairingText"]
 
-    def getRecipeSteps(self, id):
-        url = self.endpoint + "recipes/" + str(id) + "/analyzedInstructions"
-        params = {'stepBreakdown': True}
+def findByCuisine(cuisine):
+  url = ENDPOINT + "recipes/search"
+  params = {
+  'number': 1,
+  'query': '',
+  'cuisine': cuisine
+  }
+  return requests.get(url, params=params, headers=HEADERS).json()['results']
 
-        return requests.get(url, params=params, headers=self.headers).json()
+#TODO
+def complexRecipeSerach(cuisine,diet,exclude,include,maxkcal,query,type):
+  url = ENDPOINT + "recipes/searchComplex"
+
+  params = {
+
+  }
+  return requests.get(url,params=params,headers=HEADERS).json()['results'
+
+
+
+
 
     #TODO add some ingredients extraction from text features!
     #TODO possibly add visual flare to steps?
